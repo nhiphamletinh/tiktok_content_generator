@@ -1,0 +1,57 @@
+[
+  {
+    "cluster_id": 0,
+    "demand_score": 0.8399,
+    "cluster_title": "",
+    "pain_point": "",
+    "video_outline": {
+      "hook": "",
+      "body": "",
+      "cta": ""
+    }
+  },
+  {
+    "cluster_id": 1,
+    "demand_score": 0.4585,
+    "cluster_title": "",
+    "pain_point": "",
+    "video_outline": {
+      "hook": "",
+      "body": "",
+      "cta": ""
+    }
+  },
+  {
+    "cluster_id": 3,
+    "demand_score": -0.2923,
+    "cluster_title": "",
+    "pain_point": "",
+    "video_outline": {
+      "hook": "",
+      "body": "",
+      "cta": ""
+    }
+  },
+  {
+    "cluster_id": 4,
+    "demand_score": -0.4306,
+    "cluster_title": "",
+    "pain_point": "",
+    "video_outline": {
+      "hook": "",
+      "body": "",
+      "cta": ""
+    }
+  },
+  {
+    "cluster_id": 2,
+    "demand_score": -0.5755,
+    "cluster_title": "",
+    "pain_point": "",
+    "video_outline": {
+      "hook": "",
+      "body": "",
+      "cta": ""
+    }
+  }
+]
