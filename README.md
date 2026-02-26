@@ -1,27 +1,50 @@
 AI Creator Insight Tool — Layer 1 & 2
 
 Contents:
-- `generate_comments.py`: Generates 200 synthetic TikTok-style comments and writes `comments.csv`.
-- `comments.csv`: Generated dataset (200 comments).
+- `comments.csv`: Dataset of 200 synthetic TikTok-style comments (already present).
 - `embedding_pipeline.py`: Loads `comments.csv`, requests OpenAI embeddings (`text-embedding-3-small`) in batches and saves `embeddings.npy`.
-- `requirements.txt`: Python dependencies (`pandas`, `numpy`, `openai`).
+- `embedding_pipeline_local.py`: Local embedding pipeline using `sentence-transformers` and saves `embeddings_local.npy`.
+- `cluster_insights.py`: Clusters embeddings and writes `clusters.json` with representative comments.
+- `validate_embeddings.py`: Utility to print nearest neighbors for validation.
+- `requirements.txt`: Python dependencies (`pandas`, `numpy`, `openai`, `requests`).
 
-Quick usage:
+Quick usage (use existing `comments.csv` in the repo):
 
-1) Generate comments (script already included):
+1) Create and activate a virtualenv:
 
 ```bash
-python3 generate_comments.py
+cd "/home/user/tiktok oa app"
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-2) Install deps and run embeddings (requires `OPENAI_API_KEY`):
+2) Install dependencies:
 
 ```bash
+pip install --upgrade pip
 pip install -r requirements.txt
-export OPENAI_API_KEY="your_key_here"
-python3 embedding_pipeline.py
+pip install sentence-transformers scikit-learn
+```
+
+3) Produce embeddings locally (recommended):
+
+```bash
+python3 embedding_pipeline_local.py
+```
+
+4) Run clustering and extract insights:
+
+```bash
+python3 cluster_insights.py
+```
+
+5) Validate nearest neighbors for sanity checks:
+
+```bash
+python3 validate_embeddings.py --index 10 --top_k 5
 ```
 
 Notes:
-- `embedding_pipeline.py` uses batching and simple retry/backoff.
-- The scripts are intentionally minimal and produce console progress logs.
+- This repo now uses the existing `comments.csv` as the authoritative dataset; the generator file has been removed.
+- Use `LOCAL_EMBEDDING_MODEL` env var to change the local embedding model (e.g., `all-mpnet-base-v2`).
+- Model downloads may take time the first run.
