@@ -1,0 +1,9 @@
+{
+  "cluster_title": "Scholarship Visa Process",
+  "pain_point": "Applicants are unclear about how scholarship backing affects visa interviews.",
+  "video_outline": {
+    "hook": "Got scholarship? Does it really ease visa stress?",
+    "body": "While a scholarship can provide financial proof, it may not directly impact the visa interview process. However, it's essential to understand that financial vetting is part of the evaluation, and applicants should be prepared to discuss their financial situation during the interview.",
+    "cta": "Comment about your experience—how did scholarship backing affect your visa journey?"
+  }
+}

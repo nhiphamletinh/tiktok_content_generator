@@ -1,0 +1,9 @@
+{
+  "cluster_title": "Scholarship Funding Clarification",
+  "pain_point": "Applicants are unclear about scholarship funding details and requirements.",
+  "video_outline": {
+    "hook": "Don't get disqualified – what's not covered by this scholarship?",
+    "body": "The scholarship primarily covers tuition fees, but applicants must verify if living expenses are included. Check the official website or contact the provider for confirmation on funding exclusivity and work opportunities.",
+    "cta": "Comment your questions—I'll provide the answers."
+  }
+}

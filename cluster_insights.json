@@ -2,56 +2,56 @@
   {
     "cluster_id": 0,
     "demand_score": 0.8399,
-    "cluster_title": "",
-    "pain_point": "",
+    "cluster_title": "Intake Cycle Timing",
+    "pain_point": "Applicants are unclear about intake cycle schedules and planning.",
     "video_outline": {
-      "hook": "",
-      "body": "",
-      "cta": ""
+      "hook": "Is your timing off for the upcoming intake?",
+      "body": "The intake cycle has a rolling schedule with deadlines each semester. To avoid missing the application cutoff, start preparing at least three months in advance. This allows you to adjust for any common delays or changes.",
+      "cta": "Comment when you're planning to apply"
     }
   },
   {
     "cluster_id": 1,
     "demand_score": 0.4585,
-    "cluster_title": "",
-    "pain_point": "",
+    "cluster_title": "Scholarship Visa Process",
+    "pain_point": "Applicants are unclear about how scholarship backing affects visa interviews.",
     "video_outline": {
-      "hook": "",
-      "body": "",
-      "cta": ""
+      "hook": "Got scholarship? Does it really ease visa stress?",
+      "body": "While a scholarship can provide financial proof, it may not directly impact the visa interview process. However, it's essential to understand that financial vetting is part of the evaluation, and applicants should be prepared to discuss their financial situation during the interview.",
+      "cta": "Comment about your experience—how did scholarship backing affect your visa journey?"
     }
   },
   {
     "cluster_id": 3,
     "demand_score": -0.2923,
-    "cluster_title": "",
-    "pain_point": "",
+    "cluster_title": "GPA competitiveness",
+    "pain_point": "Applicants are uncertain about their GPA's impact on admissions.",
     "video_outline": {
-      "hook": "",
-      "body": "",
-      "cta": ""
+      "hook": "Is a 2.8 GPA good enough for top schools?",
+      "body": "A 2.8 GPA may not be highly competitive, but it depends on the university and applicant pool. In general, most universities consider GPAs above 3.0 as competitive. However, some mid-tier schools might accept lower GPAs depending on other factors.",
+      "cta": "Comment your GPA and I'll share tips for improving your chances"
     }
   },
   {
     "cluster_id": 4,
     "demand_score": -0.4306,
-    "cluster_title": "",
-    "pain_point": "",
+    "cluster_title": "Scholarship Funding Clarification",
+    "pain_point": "Applicants are unclear about scholarship funding details and requirements.",
     "video_outline": {
-      "hook": "",
-      "body": "",
-      "cta": ""
+      "hook": "Don't get disqualified – what's not covered by this scholarship?",
+      "body": "The scholarship primarily covers tuition fees, but applicants must verify if living expenses are included. Check the official website or contact the provider for confirmation on funding exclusivity and work opportunities.",
+      "cta": "Comment your questions—I'll provide the answers."
     }
   },
   {
     "cluster_id": 2,
     "demand_score": -0.5755,
-    "cluster_title": "",
-    "pain_point": "",
+    "cluster_title": "Scholarship Essay Tips",
+    "pain_point": "Applicants struggle to write compelling scholarship essays.",
     "video_outline": {
-      "hook": "",
-      "body": "",
-      "cta": ""
+      "hook": "What's the secret to a scholarship essay that wins?",
+      "body": "We'll explore effective opening paragraphs and achievement emphasis strategies. Learn how to balance storytelling with structured achievements in your SOPs.",
+      "cta": "Comment your biggest writing challenge—let's tackle it!"
     }
   }
 ]

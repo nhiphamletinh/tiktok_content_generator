@@ -1,0 +1,9 @@
+{
+  "cluster_title": "GPA competitiveness",
+  "pain_point": "Applicants are uncertain about their GPA's impact on admissions.",
+  "video_outline": {
+    "hook": "Is a 2.8 GPA good enough for top schools?",
+    "body": "A 2.8 GPA may not be highly competitive, but it depends on the university and applicant pool. In general, most universities consider GPAs above 3.0 as competitive. However, some mid-tier schools might accept lower GPAs depending on other factors.",
+    "cta": "Comment your GPA and I'll share tips for improving your chances"
+  }
+}

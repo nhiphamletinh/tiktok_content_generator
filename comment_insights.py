@@ -38,7 +38,7 @@ OUT_JSON = "cluster_insights.json"
 N_CLUSTERS = 5
 
 # Model settings
-MODEL_NAME = os.environ.get("OLLAMA_MODEL", "llama3-8b-instruct")
+MODEL_NAME = os.environ.get("OLLAMA_MODEL", "llama3.1")
 TEMPERATURE = 0.3
 MAX_NEW_TOKENS = 400
 TOP_P = 0.9
@@ -77,21 +77,19 @@ def find_balanced_json(s: str) -> Optional[str]:
 
 def call_ollama_cli(prompt: str, temperature: float, max_tokens: int, top_p: float) -> str:
     """Call local ollama CLI as a fallback. Returns model output string."""
+    # Ollama CLI doesn't accept temperature/max-tokens/top-p flags universally.
+    # Keep the CLI invocation minimal and pass the prompt via stdin; prefer python client when available.
     cmd = [
         "ollama",
         "run",
         MODEL_NAME,
-        "--no-stream",
-        "--temperature",
-        str(temperature),
-        "--max-tokens",
-        str(max_tokens),
-        "--top-p",
-        str(top_p),
     ]
     try:
         proc = subprocess.run(cmd, input=prompt.encode("utf-8"), stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
         out = proc.stdout.decode("utf-8", errors="ignore")
+        err = proc.stderr.decode("utf-8", errors="ignore")
+        if err:
+            return out + "\n\n=== STDERR ===\n" + err
         return out
     except FileNotFoundError:
         raise RuntimeError("ollama CLI not found; please install ollama or provide a transformer-based fallback.")
@@ -247,20 +245,51 @@ def main():
         output = None
         model_text = None
         try:
-            # try Ollama Python package if present
+            # try Ollama Python package if present; capture python errors for debugging
             try:
-                from ollama import Ollama
-
-                client = Ollama()
-                resp = client.generate(model=MODEL_NAME, prompt=prompt, temperature=TEMPERATURE, max_tokens=MAX_NEW_TOKENS, top_p=TOP_P)
-                model_text = resp.text if hasattr(resp, "text") else str(resp)
-            except Exception:
-                # fallback to CLI
+                import ollama
+                try:
+                    # use the chat helper with minimal args; ollama.chat controls options via `format`/`options`
+                    resp = ollama.chat(
+                        model=MODEL_NAME,
+                        format="json",
+                        messages=[{"role": "user", "content": prompt}],
+                    )
+                    # resp may be a data structure or ChatResponse object; stringify safely
+                    if isinstance(resp, (dict, list)):
+                        model_text = json.dumps(resp, ensure_ascii=False)
+                    else:
+                        # prefer the assistant message content if available
+                        model_text = None
+                        if hasattr(resp, "message") and getattr(resp, "message") is not None:
+                            try:
+                                model_text = getattr(resp.message, "content", None)
+                            except Exception:
+                                model_text = None
+                        if model_text is None:
+                            model_text = str(resp)
+                except Exception as e_chat:
+                    # record chat error and fall back to CLI
+                    model_text = f"PYTHON_OLLAMA_CHAT_ERROR:\n{str(e_chat)}\nFALLING_BACK_TO_CLI"
+                    model_text = call_ollama_cli(prompt, TEMPERATURE, MAX_NEW_TOKENS, TOP_P)
+            except Exception as e_import:
+                # python ollama not usable; note error and fallback to CLI
+                model_text = f"PYTHON_OLLAMA_IMPORT_ERROR:\n{str(e_import)}"
+                model_text = model_text + "\nFALLING_BACK_TO_CLI"
                 model_text = call_ollama_cli(prompt, TEMPERATURE, MAX_NEW_TOKENS, TOP_P)
 
         except Exception as e:
+            # unexpected outer error
             print(f"Model call failed for cluster {cid}: {e}")
-            model_text = ""
+            model_text = f"UNEXPECTED_ERROR:\n{str(e)}"
+
+        # Save raw model output for debugging
+        try:
+            dbg_path = f"debug_output_cluster_{cid}.txt"
+            with open(dbg_path, "w", encoding="utf-8") as dbg_f:
+                dbg_f.write(str(model_text or ""))
+        except Exception:
+            pass
 
         parsed = parse_model_output(model_text or "")
         if parsed is None:

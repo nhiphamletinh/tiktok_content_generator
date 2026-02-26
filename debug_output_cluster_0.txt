@@ -1,0 +1,9 @@
+{
+  "cluster_title": "Intake Cycle Timing",
+  "pain_point": "Applicants are unclear about intake cycle schedules and planning.",
+  "video_outline": {
+    "hook": "Is your timing off for the upcoming intake?",
+    "body": "The intake cycle has a rolling schedule with deadlines each semester. To avoid missing the application cutoff, start preparing at least three months in advance. This allows you to adjust for any common delays or changes.",
+    "cta": "Comment when you're planning to apply"
+  }
+}

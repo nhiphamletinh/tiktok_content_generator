@@ -1,0 +1,9 @@
+{
+  "cluster_title": "Scholarship Essay Tips",
+  "pain_point": "Applicants struggle to write compelling scholarship essays.",
+  "video_outline": {
+    "hook": "What's the secret to a scholarship essay that wins?",
+    "body": "We'll explore effective opening paragraphs and achievement emphasis strategies. Learn how to balance storytelling with structured achievements in your SOPs.",
+    "cta": "Comment your biggest writing challenge—let's tackle it!"
+  }
+}
