@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Creator Insight — TikTok Comments Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800;900&display=swap" rel="stylesheet">
+    <style>
+      :root{
+        --bg:#0b0b0b; --card:#0f1724; --accent:#ff2d55; --accent-2:#00f2fe; --muted:#9aa6b2; --glass: rgba(255,255,255,0.03);
+        --glass-2: rgba(255,255,255,0.04);
+        --tiktok-dark: #010101;
+        --tiktok-pink: #ff2d55;
+        --tiktok-cyan: #00f2fe;
+      }
+      *{box-sizing:border-box}
+      body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:linear-gradient(180deg,var(--tiktok-dark) 0%, #071029 100%); color:#e6eef6; margin:0; padding:0}
+      .container{max-width:1200px;margin:0 auto;padding:28px;min-height:100vh;display:flex;flex-direction:column}
+      header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+      .brand{display:flex;align-items:center;gap:12px}
+      .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#34d399,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;color:#05281b}
+      h1{margin:0;font-size:20px}
+      p.lead{margin:0;color:var(--muted)}
+
+      .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:22px;border-radius:14px;box-shadow:0 8px 30px rgba(2,6,23,0.6);}
+
+      /* screens */
+      .screen{display:none}
+      .screen.active{display:block}
+
+      .start-grid{display:flex;gap:20px;align-items:center}
+      input[type=text]{flex:1;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+      .btn{background:linear-gradient(90deg,var(--tiktok-pink), var(--tiktok-cyan));border:none;color:#081219;padding:10px 18px;border-radius:12px;font-weight:700;cursor:pointer}
+      .btn:disabled{opacity:0.6;cursor:not-allowed}
+
+      .center{display:flex;align-items:center;justify-content:center}
+      .spinner{width:56px;height:56px;border-radius:50%;border:6px solid rgba(255,255,255,0.06);border-top-color:var(--accent);animation:spin 1s linear infinite;margin:18px auto}
+      @keyframes spin{to{transform:rotate(360deg)}}
+
+      .clusters{display:flex;flex-wrap:wrap;gap:22px;margin-top:18px;justify-content:center}
+      /* cloud style */
+      .cloud{min-width:160px;max-width:260px;padding:18px;border-radius:50px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow: 0 14px 30px rgba(2,6,23,0.6);cursor:pointer;position:relative;transition:transform .28s ease, box-shadow .28s ease}
+      .cloud:hover{transform:translateY(-6px);box-shadow:0 22px 40px rgba(0,0,0,0.6)}
+      .cloud .title{font-weight:700;color:#fff;text-align:center}
+      .cloud.expanded{background:linear-gradient(90deg,var(--tiktok-pink), var(--tiktok-cyan));color:#081219}
+      .cloud.expanded .title{color:var(--tiktok-dark)}
+      .cloud .examples{display:none;position:absolute;left:50%;transform:translateX(-50%);top:110%;width:320px;background:rgba(255,255,255,0.02);border-radius:12px;padding:12px;color:var(--muted);box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+      .cloud.expanded .examples{display:block}
+
+      .insight{background:linear-gradient(180deg,#06101a,#081724);border-radius:10px;padding:12px;margin-top:12px}
+      .insight strong{color:var(--accent)}
+
+      footer{margin-top:26px;color:var(--muted);font-size:13px;text-align:center}
+
+      /* center hero */
+      .hero{flex:1;display:flex;align-items:center;justify-content:center}
+      .hero .card{width:100%;max-width:880px}
+
+      /* modal used to show expanded cluster in center */
+      .cluster-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:760px;height:540px;max-width:94%;z-index:120;border-radius:14px;padding:22px;background:linear-gradient(90deg,var(--tiktok-pink), var(--tiktok-cyan));color:#081219;box-shadow:0 30px 60px rgba(2,6,23,0.7);display:flex;flex-direction:column}
+      .cluster-modal .title{font-family: 'Poppins', system-ui, sans-serif;font-size:36px;margin:8px 0 12px;font-weight:900;text-align:center;color:#081219}
+      .cluster-modal .subtitle{font-size:15px;margin-bottom:12px;text-align:left;color:#081219;font-weight:600}
+      .cluster-modal .examples{flex:1;overflow:auto;padding:6px 4px;background:rgba(255,255,255,0.02);border-radius:8px;color:#081219;display:flex;flex-direction:column;align-items:flex-start}
+      .cluster-modal .examples div{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.03);width:100%;text-align:left}
+      .cluster-modal .close{position:absolute;right:14px;top:12px;background:transparent;border:none;color:rgba(0,0,0,0.6);font-weight:700;padding:8px;cursor:pointer}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="brand">
+            <div class="logo">CI</div>
+            <div>
+              <h1 style="font-size:20px">Creator Insight</h1>
+              <p class="lead">Turn TikTok comments into script-ready content outlines</p>
+            </div>
+          </div>
+      </header>
+
+      <main>
+        <div class="hero" style="margin-top:18px">
+          <div class="card" style="text-align:center">
+            <h1 style="font-size:64px;margin:18px 0 6px;line-height:0.95">Creator Insight</h1>
+            <p class="lead" style="font-size:18px;margin-bottom:18px;color:var(--muted)">Paste a TikTok URL to analyze comments and get short-form content ideas.</p>
+            <p style="color:var(--muted);margin-top:6px;max-width:720px;margin-left:auto;margin-right:auto">Welcome — this tool analyzes audience comments and suggests short-form content ideas tailored to what your viewers ask for and engage with.</p>
+          </div>
+        </div>
+        <!-- Screen 1: Start -->
+        <section id="screen-start" class="screen active card">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <label style="font-weight:600;color:#cfeee0">Paste your TikTok video URL</label>
+            <div class="start-grid">
+              <input id="urlInput" type="text" placeholder="https://www.tiktok.com/@username/video/123..." />
+              <button id="analyzeBtn" class="btn">Analyze</button>
+            </div>
+            <p class="lead" style="margin-top:8px">(MVP: the URL is ignored — we analyze the bundled comments dataset.)</p>
+            <p style="color:var(--muted);margin-top:8px">Tip: Try using a video where viewers ask questions — the tool will surface themes and content directions you can reuse.</p>
+          </div>
+        </section>
+
+        <!-- Screen 2: Processing / Clusters -->
+        <section id="screen-clusters" class="screen card">
+          <div id="processingView" class="center" style="flex-direction:column">
+            <div class="spinner" aria-hidden></div>
+            <div style="font-weight:700;margin-top:6px">Processing</div>
+            <div class="small" style="color:var(--muted);margin-top:6px">Running analysis on comments and clustering topics…</div>
+            <p style="max-width:760px;color:var(--muted);text-align:center;margin-top:12px">We are extracting themes from the conversation in your video's comments. This usually takes a few seconds — grab a coffee while we find the patterns your audience cares about.</p>
+          </div>
+
+          <div id="clustersView" style="display:none">
+            <h2 style="margin-top:6px;text-align:left">These are the main topics of the comments from your video</h2>
+            <p style="color:var(--muted);margin-top:8px">Below are grouped themes we found in the comments. Click any topic to inspect example comments and generate content ideas tailored to that interest.</p>
+            <div id="clusters" class="clusters"></div>
+            <div style="margin-top:14px;text-align:center">
+              <button id="recsBtn" class="btn">Get Content Recommendations</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Screen 3: Recs / generating -->
+        <section id="screen-recs" class="screen card">
+          <div id="recsProcessing" class="center" style="flex-direction:column">
+            <div class="spinner"></div>
+            <div style="font-weight:700;margin-top:6px">Generating content recs...</div>
+            <p style="max-width:760px;color:var(--muted);text-align:center;margin-top:12px">From patterns in your comment sections, here are content directions your audience is likely to respond to. Use these as starting points to craft short, engaging videos that answer real viewer questions.</p>
+          </div>
+
+          <div id="recsView" style="display:none">
+            <h2>Content Recommendations</h2>
+            <div id="insights"></div>
+            <div style="margin-top:18px;text-align:center">
+              <button id="againBtn" class="btn">Analyze another video</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- overlay used when a cluster expands -->
+      <div id="overlay" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(2,6,23,0.6);backdrop-filter:blur(6px);z-index:60"></div>
+
+      <footer>
+        Built with local models • MVP
+      </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

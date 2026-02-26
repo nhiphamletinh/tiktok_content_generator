@@ -58,6 +58,20 @@ def main():
     centroids = kmeans.cluster_centers_
     # Ensure centroids are normalized (they should be, but renormalize for safety)
     centroids = normalize(centroids, norm="l2", axis=1)
+    # attempt to read existing LLM-generated cluster titles (from comment_insights.py)
+    llm_titles = {}
+    if os.path.exists("cluster_insights.json"):
+        try:
+            with open("cluster_insights.json", "r", encoding="utf-8") as f:
+                llm_entries = json.load(f)
+                # llm_entries expected to be a list of dicts with cluster_id and cluster_title
+                for e in llm_entries:
+                    try:
+                        llm_titles[int(e.get("cluster_id"))] = str(e.get("cluster_title", "")).strip()
+                    except Exception:
+                        continue
+        except Exception:
+            llm_titles = {}
 
     clusters_out = {}
 
@@ -82,9 +96,21 @@ def main():
                 "text": str(row["text"]),
                 "similarity": float(sim),
             })
+        # Name: prefer LLM-derived short title if available, otherwise derive a short name
+        name = llm_titles.get(cid)
+        if not name:
+            # fallback: create a short name from the top representative comment
+            if rep_comments:
+                sample = rep_comments[0]["text"]
+                # take first 4 words as a compact name
+                words = sample.split()
+                name = " ".join(words[:4])
+            else:
+                name = f"Cluster {cid}"
 
         clusters_out[str(cid)] = {
             "size": size,
+            "name": name,
             "representative_comments": rep_comments,
         }
 
