@@ -59,7 +59,8 @@
       /* modal used to show expanded cluster in center */
       .cluster-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:760px;height:540px;max-width:94%;z-index:120;border-radius:14px;padding:22px;background:linear-gradient(90deg,var(--tiktok-pink), var(--tiktok-cyan));color:#081219;box-shadow:0 30px 60px rgba(2,6,23,0.7);display:flex;flex-direction:column}
       .cluster-modal .title{font-family: 'Poppins', system-ui, sans-serif;font-size:36px;margin:8px 0 12px;font-weight:900;text-align:center;color:#081219}
-      .cluster-modal .subtitle{font-size:15px;margin-bottom:12px;text-align:left;color:#081219;font-weight:600}
+      .cluster-modal .subtitle{font-size:16px;margin-bottom:12px;text-align:left;color:#081219;font-weight:700}
+      .cluster-modal .description{font-size:14px;margin-bottom:10px;text-align:left;color:#081219;opacity:0.95}
       .cluster-modal .examples{flex:1;overflow:auto;padding:6px 4px;background:rgba(255,255,255,0.02);border-radius:8px;color:#081219;display:flex;flex-direction:column;align-items:flex-start}
       .cluster-modal .examples div{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.03);width:100%;text-align:left}
       .cluster-modal .close{position:absolute;right:14px;top:12px;background:transparent;border:none;color:rgba(0,0,0,0.6);font-weight:700;padding:8px;cursor:pointer}
@@ -82,8 +83,7 @@
         <div class="hero" style="margin-top:18px">
           <div class="card" style="text-align:center">
             <h1 style="font-size:64px;margin:18px 0 6px;line-height:0.95">Creator Insight</h1>
-            <p class="lead" style="font-size:18px;margin-bottom:18px;color:var(--muted)">Paste a TikTok URL to analyze comments and get short-form content ideas.</p>
-            <p style="color:var(--muted);margin-top:6px;max-width:720px;margin-left:auto;margin-right:auto">Welcome — this tool analyzes audience comments and suggests short-form content ideas tailored to what your viewers ask for and engage with.</p>
+            <p class="lead" style="font-size:18px;margin-bottom:18px;color:var(--muted)">Paste a TikTok URL to analyze your top videos' comments and get content ideas for your next viral post.</p>
           </div>
         </div>
         <!-- Screen 1: Start -->
@@ -94,7 +94,6 @@
               <input id="urlInput" type="text" placeholder="https://www.tiktok.com/@username/video/123..." />
               <button id="analyzeBtn" class="btn">Analyze</button>
             </div>
-            <p class="lead" style="margin-top:8px">(MVP: the URL is ignored — we analyze the bundled comments dataset.)</p>
             <p style="color:var(--muted);margin-top:8px">Tip: Try using a video where viewers ask questions — the tool will surface themes and content directions you can reuse.</p>
           </div>
         </section>

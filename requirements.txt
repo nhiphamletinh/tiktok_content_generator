@@ -1,4 +1,9 @@
-pandas
+flask
+ollama
+sentence-transformers
+scikit-learn
 numpy
+pandas
+transformers
 openai
 requests
