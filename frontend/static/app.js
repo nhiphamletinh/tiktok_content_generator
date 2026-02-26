@@ -68,10 +68,15 @@ recsBtn.addEventListener('click', async () => {
   }
 })
 
+let clusterMeta = { maxSize: 0 }
+
 function renderClusters(clusters){
   clustersDiv.innerHTML = ''
   // clusters could be an array or object; normalize
   const items = Array.isArray(clusters) ? clusters : Object.values(clusters)
+  // compute max size for friendly phrasing
+  const sizes = items.map(it => (it.size || 0))
+  clusterMeta.maxSize = sizes.length ? Math.max(...sizes) : 0
   items.forEach(c => {
     // cloud element with title only; on click expand to show examples
     const div = document.createElement('div')
@@ -151,8 +156,33 @@ function openClusterModal(cluster){
 
   const title = document.createElement('div')
   title.className = 'title'
-  title.textContent = cluster.cluster_title || (`Cluster ${cluster.cluster_id ?? cluster.id}`)
+  title.textContent = cluster.name || cluster.cluster_title || (`Cluster ${cluster.cluster_id ?? cluster.id}`)
   modal.appendChild(title)
+  // description (human-friendly)
+  const desc = document.createElement('div')
+  desc.className = 'description'
+  // compute average like_count from representative_comments if available
+  const reps = cluster.representative_comments || cluster.examples || []
+  let avgLikes = 0
+  if (reps.length > 0){
+    const totalLikes = reps.reduce((acc, r) => acc + (r.like_count || 0), 0)
+    avgLikes = totalLikes / reps.length
+  }
+  const size = cluster.size || reps.length || 0
+  // friendly phrasing depending on relative size
+  let phrasing = ''
+  if (clusterMeta.maxSize && size === clusterMeta.maxSize){
+    phrasing = `This is the most popular cluster we found, with ${size} comments and an average engagement of ${avgLikes.toFixed(1)} likes per example. We recommend you focus on expanding more ideas from this topic.`
+  } else if (clusterMeta.maxSize && size >= Math.ceil(clusterMeta.maxSize * 0.6)){
+    phrasing = `A large cluster with ${size} comments and average engagement ${avgLikes.toFixed(1)} likes — a strong area to deepen content.`
+  } else if (size > 0){
+    phrasing = `This cluster contains ${size} comments (avg ${avgLikes.toFixed(1)} likes on example comments). Consider a focused video answering these common questions.`
+  } else {
+    phrasing = `This cluster has a few comments. Explore examples below to spot possible content gaps.`
+  }
+  desc.textContent = phrasing
+  modal.appendChild(desc)
+
   // subtitle
   const subtitle = document.createElement('div')
   subtitle.className = 'subtitle'
@@ -161,7 +191,6 @@ function openClusterModal(cluster){
 
   const examples = document.createElement('div')
   examples.className = 'examples'
-  const reps = cluster.representative_comments || cluster.examples || []
   if (!reps || reps.length === 0){
     const p = document.createElement('div')
     p.textContent = 'No example comments'
