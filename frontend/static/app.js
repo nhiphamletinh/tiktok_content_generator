@@ -121,42 +121,39 @@ function renderInsights(insights){
     const out = document.createElement('div')
     out.className = 'insight'
 
+    // Topic: <bold title>
     const title = document.createElement('div')
     title.className = 'insight-title'
-    title.textContent = item.cluster_title || ('Cluster ' + item.cluster_id)
+    const topicLabel = document.createElement('span')
+    topicLabel.textContent = 'Topic: '
+    const topicText = document.createElement('strong')
+    topicText.textContent = item.cluster_title || ('Cluster ' + item.cluster_id)
+    title.appendChild(topicLabel)
+    title.appendChild(topicText)
     out.appendChild(title)
 
-    // creator angle and format
-    const meta = document.createElement('div')
-    meta.className = 'insight-meta'
-    const angle = document.createElement('span')
-    angle.className = 'meta-angle'
-    angle.textContent = item.creator_angle || ''
-    const format = document.createElement('span')
-    format.className = 'meta-format'
-    format.textContent = item.content_format || ''
-    meta.appendChild(angle)
-    meta.appendChild(format)
-    out.appendChild(meta)
-
-    // Hook (pattern interrupt) emphasized
+    // Hook
     if (item.hook){
       const hook = document.createElement('div')
-      hook.className = 'insight-hook'
-      hook.textContent = item.hook
+      hook.innerHTML = `<strong>Hook:</strong> ${item.hook}`
+      hook.style.marginTop = '8px'
       out.appendChild(hook)
     }
 
-    // retention strategy
+    // Retention recommendations
     if (item.retention_strategy){
       const rs = document.createElement('div')
-      rs.className = 'insight-retention'
-      rs.textContent = `Retention: ${item.retention_strategy}`
+      rs.innerHTML = `<strong>Retention recommendations:</strong> ${item.retention_strategy}`
+      rs.style.marginTop = '6px'
       out.appendChild(rs)
     }
 
-    // body outline as bullets
-    if (Array.isArray(item.body_outline)){
+    // Details (bullets)
+    if (Array.isArray(item.body_outline) && item.body_outline.length){
+      const detailsLabel = document.createElement('div')
+      detailsLabel.innerHTML = `<strong>Details:</strong>`
+      detailsLabel.style.marginTop = '8px'
+      out.appendChild(detailsLabel)
       const ul = document.createElement('ul')
       ul.className = 'insight-body-list'
       item.body_outline.forEach(pt => {
@@ -167,11 +164,11 @@ function renderInsights(insights){
       out.appendChild(ul)
     }
 
-    // engagement CTA
+    // CTA
     if (item.engagement_cta){
       const cta = document.createElement('div')
-      cta.className = 'insight-cta'
-      cta.textContent = item.engagement_cta
+      cta.innerHTML = `<strong>CTA:</strong> ${item.engagement_cta}`
+      cta.style.marginTop = '8px'
       out.appendChild(cta)
     }
 
