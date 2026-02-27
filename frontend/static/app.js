@@ -120,24 +120,61 @@ function renderInsights(insights){
   insights.forEach(item => {
     const out = document.createElement('div')
     out.className = 'insight'
+
     const title = document.createElement('div')
-    title.innerHTML = `<strong>${item.cluster_title || 'Cluster ' + item.cluster_id}</strong> <span style='color:var(--muted);margin-left:8px'>score: ${('demand_score' in item)? item.demand_score : ''}</span>`
+    title.className = 'insight-title'
+    title.textContent = item.cluster_title || ('Cluster ' + item.cluster_id)
     out.appendChild(title)
-    if (item.pain_point){
-      const pain = document.createElement('div')
-      pain.textContent = item.pain_point
-      pain.className = 'small'
-      out.appendChild(pain)
+
+    // creator angle and format
+    const meta = document.createElement('div')
+    meta.className = 'insight-meta'
+    const angle = document.createElement('span')
+    angle.className = 'meta-angle'
+    angle.textContent = item.creator_angle || ''
+    const format = document.createElement('span')
+    format.className = 'meta-format'
+    format.textContent = item.content_format || ''
+    meta.appendChild(angle)
+    meta.appendChild(format)
+    out.appendChild(meta)
+
+    // Hook (pattern interrupt) emphasized
+    if (item.hook){
+      const hook = document.createElement('div')
+      hook.className = 'insight-hook'
+      hook.textContent = item.hook
+      out.appendChild(hook)
     }
-    const hook = document.createElement('div')
-    hook.innerHTML = `<strong>Hook:</strong> ${item.video_outline?.hook ?? ''}`
-    out.appendChild(hook)
-    const body = document.createElement('div')
-    body.innerHTML = `<strong>Body:</strong> ${item.video_outline?.body ?? ''}`
-    out.appendChild(body)
-    const cta = document.createElement('div')
-    cta.innerHTML = `<strong>CTA:</strong> ${item.video_outline?.cta ?? ''}`
-    out.appendChild(cta)
+
+    // retention strategy
+    if (item.retention_strategy){
+      const rs = document.createElement('div')
+      rs.className = 'insight-retention'
+      rs.textContent = `Retention: ${item.retention_strategy}`
+      out.appendChild(rs)
+    }
+
+    // body outline as bullets
+    if (Array.isArray(item.body_outline)){
+      const ul = document.createElement('ul')
+      ul.className = 'insight-body-list'
+      item.body_outline.forEach(pt => {
+        const li = document.createElement('li')
+        li.textContent = pt
+        ul.appendChild(li)
+      })
+      out.appendChild(ul)
+    }
+
+    // engagement CTA
+    if (item.engagement_cta){
+      const cta = document.createElement('div')
+      cta.className = 'insight-cta'
+      cta.textContent = item.engagement_cta
+      out.appendChild(cta)
+    }
+
     insightsDiv.appendChild(out)
   })
 }

@@ -49,12 +49,16 @@ DEMAND_SCORE_EPS = 1e-3
 
 EXAMPLE_OUTPUT = {
     "cluster_title": "Visa timing",
-    "pain_point": "Applicants are unsure about visa processing timelines and how it affects intake planning.",
-    "video_outline": {
-        "hook": "Visa taking forever? Plan this instead.",
-        "body": "Briefly explain typical visa timelines, common delays, and one practical step applicants can take to avoid last-minute problems.",
-        "cta": "Comment your timeline—I’ll reply with tips."
-    }
+    "creator_angle": "Myth-busting / Insider",
+    "content_format": "Hot take",
+    "hook": "They told you visa takes months — that's not the full story.",
+    "retention_strategy": "Open loop: promise a surprising step at the end",
+    "body_outline": [
+        "Quick reframing of common misconception",
+        "Three bite-sized steps to shorten delays (teaser)",
+        "Reveal the little-known action at the end"
+    ],
+    "engagement_cta": "Which of these surprised you? Reply with 1,2 or 3 and I’ll tell you more."
 }
 
 
@@ -110,7 +114,7 @@ def safe_token_count(prompt: str, tokenizer_name: str = "gpt2") -> int:
 def build_prompt(comments: list) -> str:
     """Build the strict prompt with an example output and the comments list."""
     system_inst = (
-        'SYSTEM INSTRUCTION:\n"You are a TikTok content strategist.\nYour job is to analyze audience questions and extract one clear content opportunity.\nYou MUST return valid JSON only. No explanations. No extra text."\n\n'
+        'SYSTEM INSTRUCTION:\n"You are a high-performing TikTok content strategist who writes short, retention-optimized creator prompts.\nYour goal is to produce a single content idea per cluster that a creator can film today to maximize retention and engagement.\nRETURN ONLY VALID JSON — NO EXTRA TEXT, NO BULLET POINTS OUTSIDE JSON.\nDo NOT be academic or neutral in tone; be punchy, creator-focused, emotionally engaging, but not misleading."\n\n'
     )
 
     user_preamble = "USER PROMPT STRUCTURE:\nAnalyze the following audience comments:\n\n"
@@ -126,13 +130,15 @@ def build_prompt(comments: list) -> str:
 
     template = (
         system_inst + user_preamble + example_block + "COMMENTS:\n" + comments_block + "\n"
-        + "Produce JSON in EXACTLY this format:\n{\n"
-        + '"cluster_title": "max 4 words",\n'
-        + '"pain_point": "one sentence describing the core audience frustration",\n'
-        + '"video_outline": {\n"hook": "strong curiosity-driven first sentence under 15 words",\n'
-        + '"body": "2-3 sentences explaining the core idea clearly",\n'
-        + '"cta": "short engagement call-to-action"\n}\n}\n'
-        + "Rules:\nHook must create a curiosity gap.\nBody must directly answer the dominant tension in comments.\nCTA must invite interaction (comment, save, follow).\nNo emojis. No markdown. Output must be valid JSON only."
+        + "Produce JSON in EXACTLY this format (fields must be present):\n{\n"
+        + '  "cluster_title": "short title (max 4 words)",\n'
+        + '  "creator_angle": "psychological angle (fear, myth-busting, insider, urgency, contrarian, status)",\n'
+        + '  "content_format": "format suggestion (Storytime, POV, Myth vs Reality, Hot take, Checklist, Reaction)",\n'
+        + '  "hook": "pattern-interrupt hook (bold claim / shocking fact / unexpected line, <15 words)",\n'
+        + '  "retention_strategy": "one-line description of retention mechanic (open loop / escalation / step reveal)",\n'
+        + '  "body_outline": ["point1", "point2", "point3"],\n'
+        + '  "engagement_cta": "explicit CTA that drives comments or debate"\n}\n'
+        + "Rules:\n- Tone: creator-forward, emotional, and actionable (not academic).\n- Hook MUST include a pattern interrupt or creator-framing (e.g. 'Nobody talks about this', 'If you\'re doing X stop').\n- Include a clear psychological angle label.\n- Body must be short, structured into 3 discrete items (bullets in JSON array).\n- Retention should be explicit (e.g., 'stay till end', 'I reveal step 3 at the end').\n- CTA must invite comments, disagreement, or identity-based responses.\n- Avoid factually misleading claims; do not invent stats.\n- Output valid JSON only."
     )
 
     # ensure prompt isn't absurdly long; truncate comments if necessary
@@ -307,8 +313,12 @@ def main():
                 "cluster_id": cid,
                 "demand_score": float(demand),
                 "cluster_title": "",
-                "pain_point": "",
-                "video_outline": {"hook": "", "body": "", "cta": ""},
+                "creator_angle": "",
+                "content_format": "",
+                "hook": "",
+                "retention_strategy": "",
+                "body_outline": [],
+                "engagement_cta": "",
             }
         else:
             # basic validation and trimming
@@ -316,18 +326,24 @@ def main():
             # enforce max 4 words
             if len(title.split()) > 4:
                 title = " ".join(title.split()[:4])
-            pain = str(parsed.get("pain_point", "")).strip()
-            vo = parsed.get("video_outline", {})
-            hook = str(vo.get("hook", "")).strip()
-            body = str(vo.get("body", "")).strip()
-            cta = str(vo.get("cta", "")).strip()
-
+            creator_angle = str(parsed.get("creator_angle", "")).strip()
+            content_format = str(parsed.get("content_format", "")).strip()
+            hook = str(parsed.get("hook", "")).strip()
+            retention_strategy = str(parsed.get("retention_strategy", "")).strip()
+            body_outline = parsed.get("body_outline", []) if isinstance(parsed.get("body_outline", []), list) else []
+            # ensure at most 3 bullets (pad/truncate)
+            if len(body_outline) > 3:
+                body_outline = body_outline[:3]
             entry = {
                 "cluster_id": cid,
                 "demand_score": float(demand),
                 "cluster_title": title,
-                "pain_point": pain,
-                "video_outline": {"hook": hook, "body": body, "cta": cta},
+                "creator_angle": creator_angle,
+                "content_format": content_format,
+                "hook": hook,
+                "retention_strategy": retention_strategy,
+                "body_outline": body_outline,
+                "engagement_cta": str(parsed.get("engagement_cta", "")).strip(),
             }
 
         results.append(entry)
