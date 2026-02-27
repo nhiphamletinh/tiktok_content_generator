@@ -169,16 +169,16 @@ function openClusterModal(cluster){
     avgLikes = totalLikes / reps.length
   }
   const size = cluster.size || reps.length || 0
-  // friendly phrasing depending on relative size
+  // friendly, human-first phrasing depending on relative size
   let phrasing = ''
   if (clusterMeta.maxSize && size === clusterMeta.maxSize){
-    phrasing = `This is the most popular cluster we found, with ${size} comments and an average engagement of ${avgLikes.toFixed(1)} likes per example. We recommend you focus on expanding more ideas from this topic.`
+    phrasing = `We found about ${size} comments centered on this topic — it's the most discussed theme in your video's comments. While the average engagement per example is ${avgLikes.toFixed(1)} likes, many viewers are asking about this, so creating a series of short videos that answer these specific questions will likely resonate and build momentum.`
   } else if (clusterMeta.maxSize && size >= Math.ceil(clusterMeta.maxSize * 0.6)){
-    phrasing = `A large cluster with ${size} comments and average engagement ${avgLikes.toFixed(1)} likes — a strong area to deepen content.`
+    phrasing = `There are around ${size} comments raising this topic. The average engagement (${avgLikes.toFixed(1)} likes) is respectable; this suggests an active interest you can expand on. Try one clear video that answers the top question, then follow up with a deeper explainer or quick tips.`
   } else if (size > 0){
-    phrasing = `This cluster contains ${size} comments (avg ${avgLikes.toFixed(1)} likes on example comments). Consider a focused video answering these common questions.`
+    phrasing = `About ${size} people asked similar questions here (avg ${avgLikes.toFixed(1)} likes on the examples). This is a good niche to test: make a short answer-style clip addressing the most common ask and measure how your audience responds.`
   } else {
-    phrasing = `This cluster has a few comments. Explore examples below to spot possible content gaps.`
+    phrasing = `This topic has only a few comments in the sample. If it aligns with your content goals it could be an opportunity to create a focused video that fills a gap and attracts targeted interest.`
   }
   desc.textContent = phrasing
   modal.appendChild(desc)
