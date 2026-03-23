@@ -1,6 +1,6 @@
 # Creator Insight — AI prototype for TikTok creators
 
-A compact, end-to-end prototype that turns TikTok comment threads into script-ready, retention-optimized content outlines. Built as a local-first demo showcasing practical LLM workflows, prompt engineering, and a fast product loop — designed to be submitted as an OA for an AI Product Manager intern role focused on social and creator tooling.
+A compact, end-to-end prototype that turns TikTok comment threads into script-ready, retention-optimized content outlines. Built as a local-first demo showcasing practical LLM workflows, prompt engineering, and a fast product loop.
 
 This repo contains a working prototype with:
 - a local embedding pipeline (sentence-transformers)
@@ -8,7 +8,7 @@ This repo contains a working prototype with:
 - an LLM-driven generator that outputs strict JSON outlines optimized for retention
 - a minimal Flask frontend to run analysis and preview script-ready recommendations
 
-Why this fits the internship
+What this tool does:
 - Builds AI workflows and agents: full pipeline from raw comments → embeddings → clusters → LLM insights. The project demonstrates how to compose ML components into a productized flow.
 - Automates content creation: produces TikTok-first hooks, retention strategies, and CTAs ready for creators to record and post.
 - Rapid prototyping & experimentation: local models, caching, debug logs, and a clear A/B testing plan for watch-time and comments-per-view.
@@ -171,33 +171,11 @@ To adapt the LLM step to Claude, replace the Ollama invocation in `comment_insig
 - Reliability: strict schema + parsing + retries mitigate LLM noise and allow caching of stable outputs.
 - Prioritization: demand scoring balances engagement signals (likes) and cluster prevalence so recommendations surface high-impact ideas first.
 
-## How this project maps to the internship JD
-
-- Build Claude-powered agents and workflows: the repo demonstrates an LLM-driven workflow; Claude can be substituted for Ollama in the LLM step.
-- Automate content creation: the generator outputs ready-to-film TikTok outlines (hook, body bullets, CTA).
-- Develop internal tools & speed: the Flask UI and caching enable fast iteration and measurement.
-- Prototype systems that impact operations & revenue: the tool is designed to feed A/B experiments (watch time, comments-per-view) and to be integrated into creator tooling.
-
 ## Suggested experiments & metrics
 
 - A/B test creators using generated scripts vs. control. Measure: watch time, completion rate, comments-per-view, and time-to-publish.
 - Track which cluster templates are used and correlate outline elements (hook/CTA) with engagement lift.
 
-## What to include when you apply
-
-- Link to this GitHub repo
-- A short demo video (3–5 minutes) showing: Analyze → clusters → Generate → open one recommendation and explain the prompt/choices
-- Optional: `cluster_insights.json` artifact produced for your demo
-
-## Contributing
-
-Contributions and experiments are welcome. Please open issues for bugs or feature requests. If you add a Claude integration, please add instructions and a small example in `comment_insights.py`.
-
-## License
-
-MIT
-
----
 
 If you want, I can now:
 - produce a short 9‑slide deck that follows the 5‑minute script, or
