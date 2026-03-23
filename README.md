@@ -175,8 +175,3 @@ To adapt the LLM step to Claude, replace the Ollama invocation in `comment_insig
 
 - A/B test creators using generated scripts vs. control. Measure: watch time, completion rate, comments-per-view, and time-to-publish.
 - Track which cluster templates are used and correlate outline elements (hook/CTA) with engagement lift.
-
-
-If you want, I can now:
-- produce a short 9‑slide deck that follows the 5‑minute script, or
-- add a Claude integration stub in `comment_insights.py` and a demo run (requires API key).
